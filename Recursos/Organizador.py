@@ -44,12 +44,12 @@ def plot_layout(layout, x, y, eixo_x, eixo_y):
     except:
         pass
 
-def plot_layout_hist(layout, x, eixo_x, eixo_y):
+def plot_layout_hist(layout, x, y, eixo_x, eixo_y):
     try:
         fig = plt.Figure()
         ax = fig.add_subplot()
         nova_canvas(layout, fig, ax, tb=True)
-        ax.hist(x)
+        ax.bar(x, y)
         ax.set_xlabel(eixo_x)
         ax.set_ylabel(eixo_y)
         ax.set_title(f"Qualidade do ajuste")

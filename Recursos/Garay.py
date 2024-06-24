@@ -180,8 +180,10 @@ _d_chapeu_, _h_, ht_, dap_, dif, as_, asmed, vol, id = g.aplicacao_real(id, DAP,
 df = pd.DataFrame({'arv': id, 'd_est': _d_chapeu_, 'h_est': _h_, 'ht': ht_, 'dap': dap_, 'dif': dif, 'as': as_, 'asmed': asmed, 'vol': vol})
 
 grop = df.groupby('arv').sum().reset_index()
+bins = pd.interval_range(start=0, end=5, freq=0.25, closed='right')
+grop['classe'] = pd.cut(df['vol'], bins, include_lowest=True)
 
-plt.hist(grop.arv, bins=30)
+grop['classe'].value_counts().sort_index().plot(kind='bar')
 plt.show()
 
 # plt.scatter(d, d_est, label='Estimates vs Actual')

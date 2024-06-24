@@ -164,7 +164,9 @@ class Mainui(QMainWindow):
                  'asmed': asmed, 'vol': vol})
 
             grouped = df.groupby('arv').sum().reset_index()
-            plot_layout_hist(self.plotLayout, grouped.arv, 'bins', 'vol')
+            bins = pd.interval_range(start=0, end=5, freq=0.25, closed='right')
+            grouped['classe'] = pd.cut(grouped['vol'], bins, include_lowest=True)
+            plot_layout_hist(self.plotLayout, grouped.classe, grouped.vol, 'bins', 'vol')
 
             return self.saveFileDialog(df)
 
