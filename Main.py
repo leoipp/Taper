@@ -30,8 +30,12 @@ class Mainui(QMainWindow):
         self.b2.clicked.connect(lambda: self.on_click(1))
         self.b4.clicked.connect(lambda: self.on_click(2))
         self.b6.clicked.connect(lambda: self.on_click(3))
+        self.bexp.clicked.connect(lambda: self.saveFileDialog(self.qd_ajustes))
         self.thread = None
         self.worker = None
+
+        self.horizontalSlider.valueChanged.connect(self.update_label)
+        self.horizontalSlider_2.valueChanged.connect(self.update_label_2)
 
         # Ensure alvo is initialized
         if not hasattr(self, 'alvo'):
@@ -48,6 +52,14 @@ class Mainui(QMainWindow):
         self.checkboxes_1 = []
 
         self.path, self.sheet = None, None
+        self.qd_ajustes = None
+        self.bexp.setDisabled(True)
+
+    def update_label(self, value):
+        self.label_6.setText(f'{value}')
+
+    def update_label_2(self, value):
+        self.label_7.setText(f'{value}')
 
     def openFileDialog(self, botao: int):
         options = QFileDialog.Options()
@@ -90,6 +102,7 @@ class Mainui(QMainWindow):
             self.comboBox_3.addItems(self.df.columns)
             self.comboBox_4.addItems(self.df.columns)
 
+
         if botao == 3:
             self.comboBox_5.addItems(self.df.columns)
             self.comboBox_6.addItems(self.df.columns)
@@ -111,6 +124,9 @@ class Mainui(QMainWindow):
         if botao == 2:
             taper = Garay(self.df, self.comboBox_2.currentText(), self.comboBox.currentText(),
                           self.comboBox_3.currentText(), self.comboBox_4.currentText())
+            self.horizontalSlider.setMaximum(int(taper.dap.max()))
+            self.horizontalSlider_2.setMaximum(int(taper.ht.max()))
+
             try:
                 initial_params = taper.find_initial_parameters()
                 optimized_params = taper.fit_model()
@@ -143,20 +159,26 @@ class Mainui(QMainWindow):
 
                 plot_layout(self.plotLayout, taper.d, d_est, self.comboBox_4.currentText(), 'd estimado')
 
+                self.qd_ajustes = pd.DataFrame({"Stats": ['sqres', 'r2', 'rqem', 'bias'],
+                                                "Vals": [sqres, r2, rqem, bias],
+                                                "params": ['b0', 'b1', 'b2', 'b3'],
+                                                "params_vals": optimized_params})
+                self.bexp.setDisabled(False)
 
             except Exception as e:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Critical)
                 msg.setWindowTitle('Error de parâmetro')
-                msg.setText(f'Parâmetros de inicialização incorretos! {e}')
+                msg.setText(f'Erro de ajuste {e}')
                 msg.setStandardButtons(QMessageBox.Ok)
                 msg.exec_()
 
         if botao == 3:
-            DAP, HT, id = Garay(self.df).vetorizar_aplicacao(self.comboBox_6.currentText(), self.comboBox_5.currentText(), self.comboBox_7.currentText())
-            _d_chapeu_, _h_, ht_, dap_, dif, as_, asmed, vol, id = Garay(self.df).aplicacao_real(id, DAP, HT, float(self.lineEdit_5.text()), float(self.lineEdit_6.text()), float(self.lineEdit_7.text()),
-                                                                                             [float(self.lineEdit_8.text()), float(self.lineEdit_9.text()),
-                                                                                              float(self.lineEdit_10.text()), float(self.lineEdit_11.text())])
+            taper = Garay(self.df, id=self.comboBox_6.currentText(), dap=self.comboBox_5.currentText(), ht=self.comboBox_7.currentText())
+            _d_chapeu_, _h_, ht_, dap_, dif, as_, asmed, vol, id = Garay(self.df).aplicacao_real(taper.id, taper.dap, taper.ht,
+                                                                                                 float(self.lineEdit_5.text()), float(self.lineEdit_6.text()), float(self.lineEdit_7.text()),
+                                                                                                 [float(self.lineEdit_8.text()), float(self.lineEdit_9.text()),
+                                                                                                  float(self.lineEdit_10.text()), float(self.lineEdit_11.text())])
             df = pd.DataFrame(
                 {'arv': id, 'd_est': _d_chapeu_, 'h_est': _h_, 'ht': ht_, 'dap': dap_, 'dif': dif, 'as': as_,
                  'asmed': asmed, 'vol': vol})

@@ -8,35 +8,60 @@ from sklearn.linear_model import LinearRegression
 
 
 class Garay:
-    def __init__(self, cubagem, dap, ht, h, d):
-        if cubagem is not None and dap is not None and ht is not None and h is not None and d is not None:
+    def __init__(self, cubagem=None, dap=None, ht=None, h=None, d=None, id=None):
+        if cubagem is not None:
             self.cubagem = cubagem
-            self.dap, self.ht, self.h, self.d = self.vetorizar(dap, ht, h, d)
+            self.dap, self.ht, self.h, self.d, self.id = self.vetorizar(dap, ht, h, d, id)
         else:
             self.dap = dap
             self.ht = ht
             self.h = h
             self.d = d
+            self.id = id
         self.initial_params = None
         self.optimized_params = None
 
-    def vetorizar(self, DAP_col: str, HT_col: str, h_col: str, d_col: str):
+    def vetorizar(self, dap_col=None, ht_col=None, h_col=None, d_col=None, id_col=None):
         """
         Vetoriza os dados de entrada.
-        :param DAP_col: Nome da coluna DAP
-        :param HT_col: Nome da coluna HT
-        :param h_col: Nome da coluna h
-        :param d_col: Nome da coluna d
+        :param dap_col: Nome da coluna DAP (optional)
+        :param ht_col: Nome da coluna HT (optional)
+        :param h_col: Nome da coluna h (optional)
+        :param d_col: Nome da coluna d (optional)
+        :param id_col: Nome da coluna id (optional)
         :return: arrays dos valores das colunas
         """
-        DAP = pd.to_numeric(self.cubagem[DAP_col], errors='coerce')
-        HT = pd.to_numeric(self.cubagem[HT_col], errors='coerce')
-        h = pd.to_numeric(self.cubagem[h_col], errors='coerce')
-        d = pd.to_numeric(self.cubagem[d_col], errors='coerce')
-        # Filtrar HT ou h zeros
-        valid_indices = (HT.notnull()) & (h.notnull()) & (DAP.notnull()) & (d.notnull())
-        DAP, HT, h, d = DAP[valid_indices], HT[valid_indices], h[valid_indices], d[valid_indices]
-        return DAP, HT, h, d
+        dap = pd.to_numeric(self.cubagem[dap_col], errors='coerce') if dap_col else None
+        ht = pd.to_numeric(self.cubagem[ht_col], errors='coerce') if ht_col else None
+        h = pd.to_numeric(self.cubagem[h_col], errors='coerce') if h_col else None
+        d = pd.to_numeric(self.cubagem[d_col], errors='coerce') if d_col else None
+        id = self.cubagem[id_col] if id_col else None
+
+        # Filtrar dados não nulos
+        valid_indices = pd.Series(True, index=self.cubagem.index)
+        if dap_col:
+            valid_indices &= dap.notnull()
+        if ht_col:
+            valid_indices &= ht.notnull()
+        if h_col:
+            valid_indices &= h.notnull()
+        if d_col:
+            valid_indices &= d.notnull()
+        if id_col:
+            valid_indices &= id.notnull()
+
+        if dap_col:
+            dap = dap[valid_indices]
+        if ht_col:
+            ht = ht[valid_indices]
+        if h_col:
+            h = h[valid_indices]
+        if d_col:
+            d = d[valid_indices]
+        if id_col:
+            id = id[valid_indices]
+
+        return dap, ht, h, d, id
 
     @staticmethod
     def decremento_array(array: np.array, decresed_by: float, val_min: float):
@@ -160,7 +185,7 @@ class Garay:
             return self.model_function(*params, self.dap, self.h, self.ht)
 
     def aplicacao_real(self, id, DAP: np.array, HT: np.array, d: float, comp_tora: float, h_min: float, params: list) -> np.array:
-        h_chapeu = self.garay_taper_h((DAP, d, HT), *params)
+        h_chapeu = self.garay_taper_h(params, DAP, d, HT)
         _h_chapeu_ = self.decremento_array(h_chapeu, comp_tora, h_min)
 
         id = np.concatenate([np.tile(id, len(h)) for id, h in zip(id, _h_chapeu_)])
@@ -168,7 +193,7 @@ class Garay:
         ht_ = np.concatenate([np.tile(ht, len(h)) for ht, h in zip(HT, _h_chapeu_)])
         _h_ = np.concatenate(_h_chapeu_)
 
-        _d_chapeu_ = self.garay_taper((dap_, _h_, ht_), *params)
+        _d_chapeu_ = self.model_function(params, dap_, _h_, ht_)
 
         as_ = [float((np.pi * dap ** 2) / 40000) for dap in _d_chapeu_]
         as_ = np.asarray(as_)
