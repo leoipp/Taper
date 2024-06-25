@@ -107,25 +107,23 @@ class Mainui(QMainWindow):
             self.melted = pd.melt(self.df, id_vars=n_checked, value_vars=checkeds)
             self.melted['seccao'] = self.melted['variable'].str[1:]
             return self.saveFileDialog(self.melted)
-        if botao == 2:
-            DAP, HT, h, d = Garay(self.df).vetorizar(self.comboBox_2.currentText(), self.comboBox.currentText(),
-                                                         self.comboBox_3.currentText(), self.comboBox_4.currentText())
-            try:
-                params, pcov = Garay(self.df).ajuste(self.comboBox_2.currentText(), self.comboBox.currentText(),
-                                                     self.comboBox_3.currentText(), self.comboBox_4.currentText(),
-                                                     [float(self.lineEdit.text()), float(self.lineEdit_2.text()),
-                                                      float(self.lineEdit_3.text()), float(self.lineEdit_4.text())])
 
-                d_est = Garay(self.df).aplicacao_generalista(DAP, HT, h, params)
+        if botao == 2:
+            taper = Garay(self.df, self.comboBox_2.currentText(), self.comboBox.currentText(),
+                          self.comboBox_3.currentText(), self.comboBox_4.currentText())
+            try:
+                initial_params = taper.find_initial_parameters()
+                optimized_params = taper.fit_model()
+                d_est = taper.predict()
 
                 # Calculate residuals
-                residuals = d - d_est
+                residuals = taper.d - d_est
 
                 # Calculate sum of squared residuals (SQRES)
                 sqres = np.sum(residuals ** 2)
 
                 # Calculate R^2
-                ss_tot = np.sum((d - np.mean(d)) ** 2)
+                ss_tot = np.sum((taper.d - np.mean(taper.d)) ** 2)
                 r2 = 1 - (sqres / ss_tot)
 
                 # Calculate RQEM
@@ -133,24 +131,24 @@ class Mainui(QMainWindow):
 
                 bias = np.mean(residuals)
 
-                self.label_19.setText(f"{params[0]:.8f}")
-                self.label_20.setText(f"{params[1]:.8f}")
-                self.label_21.setText(f"{params[2]:.8f}")
-                self.label_22.setText(f"{params[3]:.8f}")
+                self.label_19.setText(f"{optimized_params[0]:.8f}")
+                self.label_20.setText(f"{optimized_params[1]:.8f}")
+                self.label_21.setText(f"{optimized_params[2]:.8f}")
+                self.label_22.setText(f"{optimized_params[3]:.8f}")
 
                 self.label_30.setText(f"{sqres:.4f}")
                 self.label_27.setText(f"{r2:.4f}")
                 self.label_28.setText(f"{rqem:.4f}")
                 self.label_31.setText(f"{bias:.4f}")
 
-                plot_layout(self.plotLayout, d, d_est, self.comboBox_4.currentText(), 'd estimado')
+                plot_layout(self.plotLayout, taper.d, d_est, self.comboBox_4.currentText(), 'd estimado')
 
 
-            except RuntimeError:
+            except Exception as e:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Critical)
                 msg.setWindowTitle('Error de parâmetro')
-                msg.setText('Parâmetros de inicialização incorretos!')
+                msg.setText(f'Parâmetros de inicialização incorretos! {e}')
                 msg.setStandardButtons(QMessageBox.Ok)
                 msg.exec_()
 

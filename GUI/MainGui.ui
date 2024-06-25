@@ -208,7 +208,7 @@
                 <enum>QFrame::Raised</enum>
                </property>
                <property name="currentIndex">
-                <number>2</number>
+                <number>1</number>
                </property>
                <property name="tabSpacing">
                 <number>6</number>
@@ -218,8 +218,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>298</width>
-                  <height>365</height>
+                  <width>214</width>
+                  <height>97</height>
                  </rect>
                 </property>
                 <attribute name="label">
@@ -448,32 +448,6 @@
                             </property>
                            </widget>
                           </item>
-                          <item row="6" column="0">
-                           <widget class="QLabel" name="label_13">
-                            <property name="text">
-                             <string>DAP min:</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item row="6" column="1">
-                           <widget class="QSlider" name="horizontalSlider">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="tracking">
-                             <bool>true</bool>
-                            </property>
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="tickPosition">
-                             <enum>QSlider::TicksBelow</enum>
-                            </property>
-                           </widget>
-                          </item>
                          </layout>
                         </widget>
                        </item>
@@ -510,165 +484,6 @@
                        <property name="bottomMargin">
                         <number>0</number>
                        </property>
-                       <item>
-                        <widget class="QFrame" name="frame_14">
-                         <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
-                         </property>
-                         <property name="frameShadow">
-                          <enum>QFrame::Raised</enum>
-                         </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_10">
-                          <property name="spacing">
-                           <number>0</number>
-                          </property>
-                          <property name="leftMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
-                           <number>0</number>
-                          </property>
-                          <item>
-                           <widget class="QFrame" name="frame_15">
-                            <property name="frameShape">
-                             <enum>QFrame::StyledPanel</enum>
-                            </property>
-                            <property name="frameShadow">
-                             <enum>QFrame::Raised</enum>
-                            </property>
-                            <layout class="QHBoxLayout" name="horizontalLayout_8">
-                             <property name="spacing">
-                              <number>0</number>
-                             </property>
-                             <property name="leftMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="topMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="rightMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="bottomMargin">
-                              <number>0</number>
-                             </property>
-                             <item>
-                              <widget class="QLabel" name="label_4">
-                               <property name="text">
-                                <string>Estimativas iniciais:</string>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QFrame" name="frame_16">
-                            <property name="frameShape">
-                             <enum>QFrame::StyledPanel</enum>
-                            </property>
-                            <property name="frameShadow">
-                             <enum>QFrame::Raised</enum>
-                            </property>
-                            <layout class="QFormLayout" name="formLayout">
-                             <property name="horizontalSpacing">
-                              <number>0</number>
-                             </property>
-                             <property name="verticalSpacing">
-                              <number>5</number>
-                             </property>
-                             <property name="leftMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="topMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="rightMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="bottomMargin">
-                              <number>0</number>
-                             </property>
-                             <item row="0" column="0">
-                              <widget class="QLabel" name="label_5">
-                               <property name="text">
-                                <string>a:</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="1" column="0">
-                              <widget class="QLabel" name="label_6">
-                               <property name="text">
-                                <string>b:</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="2" column="0">
-                              <widget class="QLabel" name="label_8">
-                               <property name="text">
-                                <string>c:</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="3" column="0">
-                              <widget class="QLabel" name="label_7">
-                               <property name="text">
-                                <string>d:</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="0" column="1">
-                              <widget class="QLineEdit" name="lineEdit">
-                               <property name="text">
-                                <string>1</string>
-                               </property>
-                               <property name="frame">
-                                <bool>false</bool>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="1" column="1">
-                              <widget class="QLineEdit" name="lineEdit_2">
-                               <property name="text">
-                                <string>0.1</string>
-                               </property>
-                               <property name="frame">
-                                <bool>false</bool>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="2" column="1">
-                              <widget class="QLineEdit" name="lineEdit_3">
-                               <property name="text">
-                                <string>0.05</string>
-                               </property>
-                               <property name="frame">
-                                <bool>false</bool>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="3" column="1">
-                              <widget class="QLineEdit" name="lineEdit_4">
-                               <property name="text">
-                                <string>1.5</string>
-                               </property>
-                               <property name="frame">
-                                <bool>false</bool>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </widget>
-                          </item>
-                         </layout>
-                        </widget>
-                       </item>
                        <item>
                         <widget class="QFrame" name="frame_13">
                          <property name="frameShape">
@@ -713,12 +528,33 @@
                       </layout>
                      </widget>
                     </item>
+                    <item>
+                     <spacer name="verticalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
                    </layout>
                   </widget>
                  </item>
                 </layout>
                </widget>
                <widget class="QWidget" name="Garayap">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>211</width>
+                  <height>401</height>
+                 </rect>
+                </property>
                 <attribute name="label">
                  <string>Garay - Aplicação</string>
                 </attribute>
@@ -962,8 +798,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>298</width>
-                  <height>365</height>
+                  <width>100</width>
+                  <height>30</height>
                  </rect>
                 </property>
                 <attribute name="label">
@@ -975,8 +811,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>298</width>
-                  <height>365</height>
+                  <width>100</width>
+                  <height>30</height>
                  </rect>
                 </property>
                 <attribute name="label">
